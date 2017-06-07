@@ -116,21 +116,26 @@ def perception_step(Rover):
     # TODO: 
     # NOTE: camera image is coming to you in Rover.img
     # 1) Define source and destination points for perspective transform
-    image = Rover.img
+    
     dst_size = 5 
     bottom_offset = 6
     source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
+    image = np.copy(Rover.img)
     destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
                       [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
                       [image.shape[1]/2 + dst_size, image.shape[0] - 2*dst_size - bottom_offset], 
                       [image.shape[1]/2 - dst_size, image.shape[0] - 2*dst_size - bottom_offset],
                       ])
     # 2) Apply perspective transform
+    image = np.copy(Rover.img)
     warped = perspect_transform(image, source, destination)
     # 3) Apply color threshold to identify navigable terrain/obstacles/rock samples
+    image = np.copy(Rover.img)
     colorsel = color_thresh(image, rgb_thresh=(160,160,160))
-    colorsel_rock = color_thresh_rock_sample(img, rgb_thresh=(135, 110, 10))
-    colorsel_obstacle = color_thresh_obstacle(img, rgb_thresh=(50, 30, 30))
+    image = np.copy(Rover.img)
+    colorsel_rock = color_thresh_rock_sample(image, rgb_thresh=(135, 110, 10))
+    image = np.copy(Rover.img)
+    colorsel_obstacle = color_thresh_obstacle(image, rgb_thresh=(50, 30, 30))
     # 4) Update Rover.vision_image (this will be displayed on left side of screen)
         # Example: Rover.vision_image[:,:,0] = obstacle color-thresholded binary image
         #          Rover.vision_image[:,:,1] = rock_sample color-thresholded binary image
@@ -144,15 +149,16 @@ def perception_step(Rover):
     obstacle_xpix, obstacle_ypix = rover_coords(colorsel_obstacle)
     # 6) Convert rover-centric pixel values to world coordinates
     scale = 10
-    navigable_x_world, navigable_y_world = pix_to_world(navigable_xpix, navigable_ypix, data.xpos[data.count], 
-                                data.ypos[data.count], data.yaw[data.count], 
-                                data.worldmap.shape[0], scale)   
-    obstacle_x_world, obstacle_y_world = pix_to_world(obstacle_xpix, obstacle_ypix, data.xpos[data.count], 
-                                data.ypos[data.count], data.yaw[data.count], 
-                                data.worldmap.shape[0], scale)   
-    rock_x_world, rock_y_world = pix_to_world(rock_xpix, rock_ypix, data.xpos[data.count], 
-                                data.ypos[data.count], data.yaw[data.count], 
-                                data.worldmap.shape[0], scale)   
+    navigable_x_world, navigable_y_world = pix_to_world(navigable_xpix, navigable_ypix, Rover.pos[0], 
+                                Rover.pos[1], Rover.yaw, 
+                                Rover.worldmap.shape[0], scale)   
+    obstacle_x_world, obstacle_y_world = pix_to_world(obstacle_xpix, obstacle_ypix, Rover.pos[0], 
+                                Rover.pos[1], Rover.yaw, 
+                                Rover.worldmap.shape[0], scale)   
+    rock_x_world, rock_y_world = pix_to_world(rock_xpix, rock_ypix, Rover.pos[0], 
+                                Rover.pos[1], Rover.yaw, 
+                                Rover.worldmap.shape[0], scale)
+    
     # 7) Update Rover worldmap (to be displayed on right side of screen)
         # Example: Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
         #          Rover.worldmap[rock_y_world, rock_x_world, 1] += 1
