@@ -15,7 +15,7 @@ def color_thresh(img, rgb_thresh=(160, 160, 160)):
     # Index the array of zeros with the boolean array and set to 1
     color_select[above_thresh] = 1
     # Return the binary image
-    return color_select\
+    return color_select
 
 # Rock sample color has a threshold of R > 135, G > 110, and B < 10
 def color_thresh_rock_sample(img, rgb_thresh=(135, 110, 10)):
@@ -119,22 +119,27 @@ def perception_step(Rover):
     
     dst_size = 5 
     bottom_offset = 6
-    source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
-    image = np.copy(Rover.img)
+    #source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
+    image = Rover.img
+    #destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
+    #                  [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
+    #                  [image.shape[1]/2 + dst_size, image.shape[0] - 2*dst_size - bottom_offset], 
+    #                  [image.shape[1]/2 - dst_size, image.shape[0] - 2*dst_size - bottom_offset],
+    #                  ])
+    source = np.float32([[12.93, 141.75], 
+                 [118.01, 96.31], 
+                 [198.35, 96.31], 
+                 [302.14, 141.75]])
     destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
-                      [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
-                      [image.shape[1]/2 + dst_size, image.shape[0] - 2*dst_size - bottom_offset], 
-                      [image.shape[1]/2 - dst_size, image.shape[0] - 2*dst_size - bottom_offset],
-                      ])
+                  [image.shape[1]/2 - dst_size, image.shape[0] - 2 * dst_size - bottom_offset],
+                  [image.shape[1]/2 + dst_size, image.shape[0] - 2 * dst_size - bottom_offset], 
+                  [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
+                  ])
     # 2) Apply perspective transform
-    image = np.copy(Rover.img)
     warped = perspect_transform(image, source, destination)
     # 3) Apply color threshold to identify navigable terrain/obstacles/rock samples
-    image = np.copy(Rover.img)
     colorsel = color_thresh(image, rgb_thresh=(160,160,160))
-    image = np.copy(Rover.img)
     colorsel_rock = color_thresh_rock_sample(image, rgb_thresh=(135, 110, 10))
-    image = np.copy(Rover.img)
     colorsel_obstacle = color_thresh_obstacle(image, rgb_thresh=(50, 30, 30))
     # 4) Update Rover.vision_image (this will be displayed on left side of screen)
         # Example: Rover.vision_image[:,:,0] = obstacle color-thresholded binary image
@@ -173,7 +178,9 @@ def perception_step(Rover):
     distances, angles = to_polar_coords(navigable_xpix, navigable_ypix)
     Rover.nav_dists = distances
     Rover.nav_angles = angles
- 
     
-    
+    rock_distances, rock_angles = to_polar_coords(rock_xpix, rock_ypix)
+    Rover.rock_dists = rock_distances
+    Rover.rock_angles = rock_angles
+      
     return Rover
