@@ -44,12 +44,13 @@ def decision_step(Rover):
                 # Set steering to average angle clipped to the range +/- 15           
                 #Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
                 nav_avg_angle = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
-                obs_avg_angle = np.clip(np.mean(Rover.obst_angles * 180/np.pi), -15, 15)
-                Rover.avg_angle = np.mean([nav_avg_angle, obs_avg_angle])
-                Rover.steer = Rover.avg_angle
-                #if avg_angle > 0.2:
+                Rover.steer = nav_avg_angle
+                #obs_avg_angle = np.clip(np.mean(Rover.obst_angles * 180/np.pi), -15, 15)
+                #Rover.avg_angle = np.mean([nav_avg_angle, obs_avg_angle])
+                #Rover.steer = Rover.avg_angle
+                #if nav_avg_angle > 0.2:
                 #    Rover.steer = -2
-                #elif avg_angle < 0:
+                #elif nav_avg_angle < 0:
                 #    Rover.steer = 2
                 #else:
                 #    Rover.steer = 0
