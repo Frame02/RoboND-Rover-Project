@@ -14,8 +14,21 @@ def decision_step(Rover):
     if Rover.nav_angles is not None:
         # Check for Rover.mode status
         if Rover.mode == 'forward': 
-            # TODO: Below this line is where you could implement logic for the rover to get unstuck.
-            if (Rover.roll > 3) & (Rover.pitch > 3):
+            # Check if rover is near sample and if it is not picking up, then pick up the sample
+            if Rover.near_sample and not Rover.picking_up:
+                Rover.throttle = 0
+                # Set brake to stored brake value
+                Rover.brake = Rover.brake_set
+                Rover.steer = 0
+                Rover.send_pickup = True
+            # Once Rover picked up the sample, then move on
+            elif Rover.picking_up and not Rover.near_sample:
+                Rover.picking_up = 0
+                Rover.throttle = Rover.throttle_set
+                Rover.brake = 0
+                Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+            # See if the rover is stuck by checking roll and pitch.
+            elif ((Rover.roll > 2) & (Rover.pitch > 2)):
                 Rover.throttle = 0
                 Rover.brake = 0
                 Rover.mode = 'stop'
@@ -29,7 +42,17 @@ def decision_step(Rover):
                 else: # Else coast
                     Rover.throttle = 0
                 # Set steering to average angle clipped to the range +/- 15           
-                Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                #Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                nav_avg_angle = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                obs_avg_angle = np.clip(np.mean(Rover.obst_angles * 180/np.pi), -15, 15)
+                Rover.avg_angle = np.mean([nav_avg_angle, obs_avg_angle])
+                Rover.steer = Rover.avg_angle
+                #if avg_angle > 0.2:
+                #    Rover.steer = -2
+                #elif avg_angle < 0:
+                #    Rover.steer = 2
+                #else:
+                #    Rover.steer = 0
             # If there's a lack of navigable terrain pixels then go to 'stop' mode
             elif len(Rover.nav_angles) < Rover.stop_forward:
                     # Set mode to "stop" and hit the brakes!
@@ -73,8 +96,8 @@ def decision_step(Rover):
         Rover.mode = 'forward'
     
     # If in a state where want to pickup a rock send pickup command
-    if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
-        Rover.send_pickup = True
+    #if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
+        #Rover.send_pickup = True
     
     return Rover
 

@@ -81,7 +81,9 @@ class RoverState():
         self.picking_up = 0 # Will be set to telemetry value data["picking_up"]
         self.send_pickup = False # Set to True to trigger rock pickup
         
-        #TODO: This is where you could add additional properties as needed in your decision making logic.
+        self.avg_angle = 0
+        self.obst_dists = 0
+        self.obst_angles = 0
 
 # Initialize our rover 
 Rover = RoverState()
