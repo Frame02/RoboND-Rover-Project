@@ -180,8 +180,8 @@ def perception_step(Rover):
     Rover.nav_dists = distances
     Rover.nav_angles = angles
     
-    #obst_distances, obst_angles = to_polar_coords(obstacle_xpix, obstacle_ypix)
-    #Rover.obst_dists = obst_distances
-    #Rover.obst_angles = obst_angles
+    rock_dists, rock_angles = to_polar_coords(rock_xpix, rock_ypix)
+    Rover.rock_dists = rock_dists
+    Rover.rock_angles = rock_angles
       
     return Rover

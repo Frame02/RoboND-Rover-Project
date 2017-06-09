@@ -62,7 +62,7 @@ class RoverState():
         # get creative in adding new fields or modifying these!
         self.stop_forward = 100 # Threshold to initiate stopping
         self.go_forward = 700 # Threshold to go forward again
-        self.max_vel = 2 # Maximum velocity (meters/second)
+        self.max_vel = 10 # Maximum velocity (meters/second)
         self.turn_times = 0
         self.turn_times_set = 12
         self.backtrack = False
@@ -82,8 +82,8 @@ class RoverState():
         self.send_pickup = False # Set to True to trigger rock pickup
         
         self.avg_angle = 0
-        #self.obst_dists = 0
-        #self.obst_angles = 0
+        self.rock_dists = 0
+        self.rock_angles = 0
 
 # Initialize our rover 
 Rover = RoverState()
