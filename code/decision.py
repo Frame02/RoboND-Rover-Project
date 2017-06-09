@@ -17,7 +17,6 @@ def decision_step(Rover):
         if Rover.mode == 'forward': 
             # Set the navigation angle towards the rock if found, else set it to navigable terrain
             if(not math.isnan(np.mean(Rover.rock_dists))):
-                print('mean rock_dists =', np.mean(Rover.rock_dists))
                 nav_avg_angle = np.clip(np.mean(Rover.rock_angles * 180/np.pi), -15, 15)
             else:
                 nav_avg_angle = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
