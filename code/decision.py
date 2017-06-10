@@ -54,11 +54,11 @@ def decision_step(Rover):
                 #Rover.avg_angle = np.mean([nav_avg_angle, obs_avg_angle])
                 #Rover.steer = Rover.avg_angle
                 if nav_avg_angle > 11.45:
-                    Rover.steer = -5
+                    Rover.steer = -7.5 #steer left
                 elif nav_avg_angle < 0:
-                    Rover.steer = 5
+                    Rover.steer = 7.5 #steer right
                 else:
-                    Rover.steer = 0
+                    Rover.steer = 0 #steer forward
                 Rover.steer = nav_avg_angle
             # If there's a lack of navigable terrain pixels then go to 'stop' mode
             elif len(Rover.nav_angles) < Rover.stop_forward:
