@@ -1,40 +1,30 @@
 ## Project: Search and Sample Return
-### Writeup Template: You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
 ---
-
 
 **The goals / steps of this project are the following:**  
 
+* The main goal of this project is to guide the Rover to navigate & map a terrain by providing it the necessary instructions to "perceive" and interpret its field of vision (i.e. path & surroundings) and "decide" on how to navigate the terrain.
+* The Rover also should detect and pickup "rock" samples that it comes across its way.
+
 **Training / Calibration**  
 
-* Download the simulator and take data in "Training Mode"
-* Test out the functions in the Jupyter Notebook provided
-* Add functions to detect obstacles and samples of interest (golden rocks)
-* Fill in the `process_image()` function with the appropriate image processing steps (perspective transform, color threshold etc.) to get from raw images to a map.  The `output_image` you create in this step should demonstrate that your mapping pipeline works.
-* Use `moviepy` to process the images in your saved dataset with the `process_image()` function.  Include the video you produce as part of your submission.
+* The training video is located at https://github.com/Frame02/RoboND-Rover-Project/blob/my_proj_branch/output/test_mapping.mp4
 
 **Autonomous Navigation / Mapping**
-
-* Fill in the `perception_step()` function within the `perception.py` script with the appropriate image processing functions to create a map and update `Rover()` data (similar to what you did with `process_image()` in the notebook). 
-* Fill in the `decision_step()` function within the `decision.py` script with conditional statements that take into consideration the outputs of the `perception_step()` in deciding how to issue throttle, brake and steering commands. 
-* Iterate on your perception and decision function until your rover does a reasonable (need to define metric) job of navigating and mapping.  
+ 
+* I filled the perception_step(...) and decision_step(...) in `perception.py` and  `decision.py` with appropriate steps for image processing and decision making.
+* I iterated the perception and decision steps multiple times to come up with reasonable metrics for Rover navigation and mapping.
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
-[image2]: ./calibration_images/example_grid1.jpg
-[image3]: ./calibration_images/example_rock1.jpg 
+
+[Training image 1]: https://github.com/Frame02/RoboND-Rover-Project/blob/my_proj_branch/IMG/robocam_2017_06_04_22_38_11_937.jpg
+[Training image 2]: https://github.com/Frame02/RoboND-Rover-Project/blob/my_proj_branch/IMG/robocam_2017_06_04_22_38_19_873.jpg 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
-You're reading it!
 
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
@@ -55,8 +45,7 @@ And another!
 
 **Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
-
+I tried to implement wall-following algorithm to guide the Rover to navigate its terrain. I also implemented the functionality to guide the Rover whenever it sees the rock sample and pick up the same. However, the fidelity of the produced map is low despite of updating the map only when Rover's roll and pitch angles are low.
 
 
 ![alt text][image3]
