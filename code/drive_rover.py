@@ -16,6 +16,7 @@ import json
 import pickle
 import matplotlib.image as mpimg
 import time
+import decimal
 
 # Import functions for perception and decision making
 from perception import perception_step
@@ -60,8 +61,8 @@ class RoverState():
         # of navigable terrain pixels.  This is a very crude form of knowing
         # when you can keep going and when you should stop.  Feel free to
         # get creative in adding new fields or modifying these!
-        self.stop_forward = 1000 # Threshold to initiate stopping
-        self.go_forward = 3000 # Threshold to go forward again
+        self.stop_forward = 750 # Threshold to initiate stopping
+        self.go_forward = 2000 # Threshold to go forward again
         self.max_vel = 3 # Maximum velocity (meters/second)
         self.turn_times = 0
         self.turn_times_set = 12
@@ -81,14 +82,20 @@ class RoverState():
         self.picking_up = 0 # Will be set to telemetry value data["picking_up"]
         self.send_pickup = False # Set to True to trigger rock pickup
         
+        self.close_pixel_dist_threshold = 60
+        self.stuck_period_check = 5
         self.avg_angle = 0
         self.rock_dists = 0
         self.rock_angles = 0
         self.origin_pos = None
-        self.check_if_stuck = False
+        self.prev_time = 0
+        self.prev_pos = None
 
 # Initialize our rover 
 Rover = RoverState()
+
+# set the decimal context precision to 1
+decimal.getcontext().prec = 1
 
 # Variables to track frames per second (FPS)
 # Intitialize frame counter
